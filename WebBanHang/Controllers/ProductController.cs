@@ -79,7 +79,7 @@ namespace WebBanHang.Controllers
             {
                 return NotFound();
             }
-            //truyền danh sách thể loại cho View để sinh ra điều khiển DropDownList
+         
             ViewBag.CategoryList = _db.Categories.Select(x => new SelectListItem
             {
 
@@ -88,16 +88,16 @@ namespace WebBanHang.Controllers
             });
             return View(product);
         }
-        //Xử lý cập nhật sản phẩm
+        
         [HttpPost]
         public IActionResult Update(Product product, IFormFile ImageUrl)
         {
-            if (ModelState.IsValid) //kiem tra hop le
+            if (ModelState.IsValid) 
             {
                 var existingProduct = _db.Products.Find(product.Id);
                 if (ImageUrl != null)
                 {
-                    //xu ly upload và lưu ảnh đại diện mới
+                
                     product.ImageUrl = SaveImage(ImageUrl);
                     //xóa ảnh cũ (nếu có)
                     if (!string.IsNullOrEmpty(existingProduct.ImageUrl))
