@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,29 +16,19 @@ namespace WebBanHang.Controllers
     {
         private ApplicationDbContext _db;
         private IWebHostEnvironment _hosting;
+
         public ProductController(ApplicationDbContext db, IWebHostEnvironment hosting)
         {
             _db = db;
             _hosting = hosting;
         }
+
         public IActionResult Index()
         {
             var dsProduct = _db.Products.Include(x => x.Category).ToList();
             return View(dsProduct);
         }
-        public IActionResult Delete(int id)
-        {
-            var sp = _db.Products.Find(id);
-            return View(sp);
-        }
-        public IActionResult DeleteConfirmed(int id)
-        {
-            var sp = _db.Products.Find(id);
-            _db.Products.Remove(sp);
-            _db.SaveChanges();
-            TempData["success"] = "Product deleted success";
-            return RedirectToAction("Index");
-        }
+
         public IActionResult Add()
         {
             ViewBag.CategoryList = _db.Categories.Select(x => new SelectListItem
@@ -49,86 +38,151 @@ namespace WebBanHang.Controllers
             });
             return View();
         }
+
         [HttpPost]
         public IActionResult Add(Product product, IFormFile ImageUrl)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.CategoryList = _db.Categories.Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.Name
+                });
+                return View(product);
+            }
+
             if (ImageUrl != null)
             {
                 product.ImageUrl = SaveImage(ImageUrl);
             }
+
             _db.Products.Add(product);
             _db.SaveChanges();
-            TempData["success"] = "Product inserted success";
+            TempData["SuccessMessage"] = "Thêm sản phẩm thành công!";
             return RedirectToAction("Index");
         }
-        private string SaveImage(IFormFile image)
-        {
-            var filename = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-            var path = Path.Combine(_hosting.WebRootPath, @"images/products");
-            var saveFile = Path.Combine(path, filename);
-            using (var filestream = new FileStream(saveFile, FileMode.Create))
-            {
-                image.CopyTo(filestream);
-            }
-            return @"images/products/" + filename;
-        }
+
         public IActionResult Update(int id)
         {
             var product = _db.Products.Find(id);
             if (product == null)
             {
-                return NotFound();
+                TempData["error"] = "Không tìm thấy sản phẩm để cập nhật.";
+                return RedirectToAction("Index");
             }
-         
+
             ViewBag.CategoryList = _db.Categories.Select(x => new SelectListItem
             {
-
                 Value = x.Id.ToString(),
                 Text = x.Name
             });
+
             return View(product);
         }
-        
+
         [HttpPost]
         public IActionResult Update(Product product, IFormFile ImageUrl)
         {
-            if (ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
-                var existingProduct = _db.Products.Find(product.Id);
-                if (ImageUrl != null)
+                ViewBag.CategoryList = _db.Categories.Select(x => new SelectListItem
                 {
-                
-                    product.ImageUrl = SaveImage(ImageUrl);
-                    //xóa ảnh cũ (nếu có)
-                    if (!string.IsNullOrEmpty(existingProduct.ImageUrl))
-                    {
-                        var oldFilePath = Path.Combine(_hosting.WebRootPath, existingProduct.ImageUrl);
-                        if (System.IO.File.Exists(oldFilePath))
-                        {
-                            System.IO.File.Delete(oldFilePath);
-                        }
-                    }
-                }
-                else
-                {
-                    product.ImageUrl = existingProduct.ImageUrl;
-                }
-                //cập nhật product vào table Product
-                existingProduct.Name = product.Name;
-                existingProduct.Description = product.Description;
-                existingProduct.Price = product.Price;
-                existingProduct.CategoryId = product.CategoryId;
-                existingProduct.ImageUrl = product.ImageUrl;
-                _db.SaveChanges();
-                TempData["success"] = "Product updated success";
+                    Value = x.Id.ToString(),
+                    Text = x.Name
+                });
+                return View(product);
+            }
+
+            var existingProduct = _db.Products.Find(product.Id);
+            if (existingProduct == null)
+            {
+                TempData["error"] = "Sản phẩm không tồn tại.";
                 return RedirectToAction("Index");
             }
-            ViewBag.CategoryList = _db.Categories.Select(x => new SelectListItem
+
+            if (ImageUrl != null)
             {
-                Value = x.Id.ToString(),
-                Text = x.Name
-            });
-            return View();
+                product.ImageUrl = SaveImage(ImageUrl);
+
+                if (!string.IsNullOrEmpty(existingProduct.ImageUrl))
+                {
+                    var oldFilePath = Path.Combine(_hosting.WebRootPath, existingProduct.ImageUrl);
+                    if (System.IO.File.Exists(oldFilePath))
+                    {
+                        System.IO.File.Delete(oldFilePath);
+                    }
+                }
+            }
+            else
+            {
+                product.ImageUrl = existingProduct.ImageUrl;
+            }
+
+            existingProduct.Name = product.Name;
+            existingProduct.Description = product.Description;
+            existingProduct.Price = product.Price;
+            existingProduct.CategoryId = product.CategoryId;
+            existingProduct.ImageUrl = product.ImageUrl;
+
+            _db.SaveChanges();
+            TempData["success"] = "Cập nhật sản phẩm thành công!";
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var sp = _db.Products.Find(id);
+            if (sp == null)
+            {
+                TempData["error"] = "Không tìm thấy sản phẩm để xoá.";
+                return RedirectToAction("Index");
+            }
+
+            return View(sp);
+        }
+
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var sp = _db.Products.Find(id);
+            if (sp == null)
+            {
+                TempData["error"] = "Không tìm thấy sản phẩm để xoá.";
+                return RedirectToAction("Index");
+            }
+
+            if (!string.IsNullOrEmpty(sp.ImageUrl))
+            {
+                var filePath = Path.Combine(_hosting.WebRootPath, sp.ImageUrl);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+
+            _db.Products.Remove(sp);
+            _db.SaveChanges();
+            TempData["success"] = "Xoá sản phẩm thành công!";
+            return RedirectToAction("Index");
+        }
+
+        private string SaveImage(IFormFile image)
+        {
+            var filename = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+            var path = Path.Combine(_hosting.WebRootPath, "images/products");
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            var saveFile = Path.Combine(path, filename);
+            using (var filestream = new FileStream(saveFile, FileMode.Create))
+            {
+                image.CopyTo(filestream);
+            }
+
+            return "images/products/" + filename;
         }
     }
 }

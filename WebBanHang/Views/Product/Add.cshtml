@@ -1,4 +1,12 @@
 ﻿@model Product
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <form asp-action="Add" method="post" enctype="multipart/form-data">
     <h2>Add Product</h2>
     <hr />
@@ -18,7 +26,7 @@
             </div>
             <div class=" form-gruop pb-2">
                 <label>Category</label>
-                <select asp-for="CategoryId"asp-items="@ViewBag.CategoryList" class="form-control">
+                <select asp-for="CategoryId" asp-items="@ViewBag.CategoryList" class="form-control">
                     <option disabled selected>==Select category === ></option>
                 </select>
             </div>

@@ -1,8 +1,12 @@
 ﻿@model Product
-<form asp-action="DeleteConfirmed">
+
+<h2>Xóa sản phẩm</h2>
+<hr />
+<p>Bạn có chắc chắn muốn xóa sản phẩm "<strong>@Model.Name</strong>" không?</p>
+
+<form asp-action="DeleteConfirmed" method="post">
     <input type="hidden" asp-for="Id" />
-    <h3>Bạn có muốn xóa sản phẩm này không?</h3>
-    <button type="submit">Delete</button>
-    <a asp-action="Index">Cancel</a>
-z+
+
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
 </form>
