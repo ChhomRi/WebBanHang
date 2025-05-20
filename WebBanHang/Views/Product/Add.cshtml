@@ -1,11 +1,20 @@
 ﻿@model Product
-@if (TempData["SuccessMessage"] != null)
+@if (TempData["success"] != null)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["SuccessMessage"]
+        @TempData["success"]
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
+
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 
 <form asp-action="Add" method="post" enctype="multipart/form-data">
     <h2>Add Product</h2>
@@ -38,4 +47,4 @@
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
     <a asp-action="Index" class="btn btn-secondary ">Back to List</a>
-</form> 
+</form>

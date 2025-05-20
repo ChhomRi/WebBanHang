@@ -1,7 +1,22 @@
 ﻿@model List<Product>
+@if (TempData["success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 
 <div class="text-end">
-    <a asp-action="Add"class="btn btn-success"> <i class="bi bi-plus-circle"></i>Add New</a>
+    <a asp-action="Add" class="btn btn-success"> <i class="bi bi-plus-circle"></i>Add New</a>
 </div>
 <table class="table table-bordered">
     <tr>
@@ -13,25 +28,26 @@
 
 
     </tr>
-    @foreach(var p in Model)
-            {
-                <tr>
-                    <td>@p.Name</td>
-                    <td>@p.Price</td>
-                    <td>@p.Category.Name</td>
-                    <td>
-                        @if (p.ImageUrl != null){ 
-                            <img src="@p.ImageUrl "  style="width:100px"/>
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>@p.Name</td>
+            <td>@p.Price</td>
+            <td>@p.Category.Name</td>
+            <td>
+                @if (p.ImageUrl != null)
+                {
+                    <img src="@p.ImageUrl " style="width:100px" />
 
-                        }
-                    </td>
-                    <td>
-                        <a asp-action="Update" asp-route-id="@p.Id" class="btn btn-secondary"><i class="bi bi-pencil-square"></i> Update</a>
-                        <a asp-action="Delete" asp-route-id="@p.Id" class="btn btn-danger"><i class="bi bi-trash3"></i>Delete</a>
-                    </td>
+                }
+            </td>
+            <td>
+                <a asp-action="Update" asp-route-id="@p.Id" class="btn btn-secondary"><i class="bi bi-pencil-square"></i> Update</a>
+                <a asp-action="Delete" asp-route-id="@p.Id" class="btn btn-danger"><i class="bi bi-trash3"></i>Delete</a>
+            </td>
 
 
-                </tr>
-            }
-     
+        </tr>
+    }
+
 </table> 
