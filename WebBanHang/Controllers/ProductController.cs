@@ -23,22 +23,16 @@ namespace WebBanHang.Controllers
             _hosting = hosting;
         }
 
-        public IActionResult Index(int page = 1, int pageSize = 5)
+        public IActionResult Index(int page = 1)
         {
-            var query = _db.Products.Include(x => x.Category).OrderBy(p => p.Id);
+            int pageSize = 3;
+            var currentPage = page;
+            var dsSanPham = _db.Products.Include(x => x.Category).ToList();
+            //Truyen du lieu cho View
+            ViewBag.PageSum = Math.Ceiling((double)dsSanPham.Count / pageSize);
+            ViewBag.CurrentPage = currentPage;
 
-            int totalItems = query.Count();
-            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-
-            var products = query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-
-            return View(products);
+            return View(dsSanPham.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList());
         }
 
         public IActionResult Add()
