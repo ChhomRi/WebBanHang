@@ -1,19 +1,5 @@
 ﻿@model List<Product>
-@if (TempData["success"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["success"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
-
-@if (TempData["error"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @TempData["error"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
+<partial name="_ThongBao" />
 
 <div class="text-end">
     <a asp-action="Add" class="btn btn-success"> <i class="bi bi-plus-circle"></i>Add New</a>
@@ -51,3 +37,16 @@
     }
 
 </table> 
+<div class="pagination" style="margin-top: 20px; text-align: center;">
+    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+    {
+        if (i == ViewBag.CurrentPage)
+        {
+            <span style="margin: 0 5px; font-weight: bold; color: white;">@i</span>
+        }
+        else
+        {
+            <a href="?page=@i" style="margin: 0 5px; color: lightblue;">@i</a>
+        }
+    }
+</div>

@@ -1,26 +1,29 @@
-﻿﻿@if (TempData["success"] != null)
-{
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
-</script>
-    <script>
-        Swal.fire({
-            title: "@TempData["success"]",
-            text: "",
-            icon: "success"
-        });
-    </script>
-}
-
-
-@if (TempData["error"] != null)
+﻿@if (TempData["success"] != null || TempData["error"] != null)
 {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "@TempData["error"]",
-            footer: ''
+        document.addEventListener("DOMContentLoaded", function () {
+            @if (TempData["success"] != null)
+            {
+                <text>
+                    Swal.fire({
+                        title: "@TempData["success"]",
+                        icon: "success"
+                    });
+                </text>
+            }
+
+            @if (TempData["error"] != null)
+            {
+                <text>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "@TempData["error"]",
+                        footer: ''
+                    });
+                </text>
+            }
         });
     </script>
 }

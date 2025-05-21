@@ -23,10 +23,22 @@ namespace WebBanHang.Controllers
             _hosting = hosting;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page = 1, int pageSize = 5)
         {
-            var dsProduct = _db.Products.Include(x => x.Category).ToList();
-            return View(dsProduct);
+            var query = _db.Products.Include(x => x.Category).OrderBy(p => p.Id);
+
+            int totalItems = query.Count();
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            var products = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(products);
         }
 
         public IActionResult Add()
@@ -59,7 +71,7 @@ namespace WebBanHang.Controllers
 
             _db.Products.Add(product);
             _db.SaveChanges();
-            TempData["SuccessMessage"] = "Thêm sản phẩm thành công!";
+           TempData["success"] = "Thêm sản phẩm thành công!";
             return RedirectToAction("Index");
         }
 
