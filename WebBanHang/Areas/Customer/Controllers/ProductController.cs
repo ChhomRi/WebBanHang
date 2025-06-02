@@ -7,8 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebBanHang.Models;
 
-namespace WebBanHang.Controllers
+namespace WebBanHang.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _db;
