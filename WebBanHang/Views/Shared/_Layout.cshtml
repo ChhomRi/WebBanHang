@@ -31,9 +31,17 @@
 
 
 
+
                     </ul>
                     <div class="d-flex ms-auto">
                         <partial name="_LoginPartial" />
+                        <form class="d-flex">
+                            <button class="btn btn-outline-light" type="submit">
+                                <i class="bi-cart-fill me-1"></i>
+                                Cart
+                                <span class="showcart badge bg-light text-black ms-1 rounded-pill">0</span>
+                            </button>
+                        </form>x
                     </div>
                 </div>
 
@@ -46,6 +54,7 @@
         </main>
     </div>
 
+
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - WebBanHang - <a asp-area="Admin" asp-controller="Product" asp-action="Index">Admin</a>
@@ -55,5 +64,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>

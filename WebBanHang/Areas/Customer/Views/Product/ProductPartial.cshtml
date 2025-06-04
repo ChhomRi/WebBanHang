@@ -23,7 +23,7 @@
             }
             <div class="card-body">
                 <a href="#" class="card-link">Details</a>
-                <a href="#" class="card-link">Add To Cart</a>
+                <a asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@p.Id" class="card-link">Add To Cart</a>
             </div>
         </div>
     }
