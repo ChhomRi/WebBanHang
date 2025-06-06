@@ -9,57 +9,58 @@
 }
 
 <form asp-action="Update" method="post" enctype="multipart/form-data">
-    <!-- Gửi Id sản phẩm về server -->
     <input type="hidden" asp-for="Id" />
 
     <h2>Update Product</h2>
     <hr />
-    <div class="row">
-        <div class="col-12">
-            <div class="form-group pb-2">
-                <label asp-for="Name"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
 
-            <div class="form-group pb-2">
-                <label asp-for="Description"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-
-            <div class="form-group pb-2">
-                <label asp-for="Price"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-
-            <div class="form-group pb-2">
-                <label asp-for="CategoryId"></label>
-                <select asp-for="CategoryId" asp-items="@ViewBag.CategoryList" class="form-control">
-                    <option disabled value="">-- Select Category --</option>
-                </select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group pb-2">
-                <label asp-for="ImageUrl">Product Image</label>
-                <input asp-for="ImageUrl" type="file" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-
-               
-                @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                {
-                    <div class="mt-2">
-                        <img src="@Url.Content(Model.ImageUrl)" alt="Current Image" width="150" />
-                    </div>
-                }
-            </div>
-        </div>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Update</button>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group pb-2">
+        <label asp-for="Price" class="form-label"></label>
+        <input asp-for="Price" class="form-control" type="number" min="0" step="0.01" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="CategoryId" class="form-label"></label>
+        <select asp-for="CategoryId" asp-items="ViewBag.CategoryList" class="form-select">
+            <option disabled value="">-- Select Category --</option>
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Current Image</label><br />
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Url.Content(Model.ImageUrl)" alt="Current Image" width="120" class="img-thumbnail" />
+        }
+        else
+        {
+            <p>No image available.</p>
+        }
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Upload New Image</label>
+        <input type="file" name="ImageFile" class="form-control" />
+        <small class="form-text text-muted">Choose only if you want to replace the current image.</small>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
 
 @section Scripts {

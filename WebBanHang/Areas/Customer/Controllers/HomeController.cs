@@ -26,13 +26,13 @@ namespace WebBanHang.Areas.Customer.Controllers
         public IActionResult Index()
         {
             var pageSize = 3;
-            var dsSanPham = _db.Products.Include(x => x.Category).ToList();
+            var dsSanPham = _db.Products.Include(x => x.Category).OrderBy(x => x.Price).ToList();
             return View(dsSanPham.Skip(0).Take(pageSize).ToList());
         }
         public IActionResult LoadMore(int page = 2)
         {
-            var pageSize = 3;
-            var dsSanPham = _db.Products.Include(x => x.Category).ToList();
+            var pageSize = 2;
+            var dsSanPham = _db.Products.Include(x => x.Category).OrderBy(x => x.Price).ToList();
             return PartialView("_ProductPartial", dsSanPham.Skip((page - 1) * pageSize).Take(pageSize).ToList());
         }
         public IActionResult Privacy()

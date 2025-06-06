@@ -16,19 +16,21 @@ let showQuantityCart = () => {
 
 $(document).on("click", ".addtocart", function (evt) {
     evt.preventDefault();
-    let id = $(this).attr("data-productId");
+
+    let id = $(this).data("productid");
     $.ajax({
-        url: "/customer/cart/addtocartapi",
-        data: { "productId": id },
+        url: "/customer/cart/AddToCart",
+        data: { productId: id },
         success: function (data) {
-         
             Swal.fire({
-                title: "Product added to cart",
-                text: "You clicked the button!",
-                icon: "success"
+                icon: "success",
+                title: "Đã thêm vào giỏ hàng!",
+                text: "Bạn có thể tiếp tục mua sắm hoặc đi đến giỏ hàng."
             });
-       
-            showQuantityCart();
+            showQuantiyCart();
+        },
+        error: function () {
+            Swal.fire("Lỗi", "Không thể thêm sản phẩm vào giỏ", "error");
         }
     });
-})
+});

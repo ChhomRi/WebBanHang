@@ -6,7 +6,7 @@
 
 @foreach (var p in Model)
     {
-    <div class="card mb-3 col-md-4">
+    <div class="card mb-3 col-md-4 d-flex flex-column h-100">
         <h3 class="card-header">@p.Name</h3>
         <div class="card-body">
             <h5 class="card-title">Price: @string.Format("{0:#,#,#00} USD", p.Price)</h5>
@@ -15,7 +15,7 @@
 
 @if (!string.IsNullOrEmpty(p.ImageUrl))
             {
-        <img src="/@p.ImageUrl" class="img-fluid" />
+        <img src="/@p.ImageUrl" class="img-fluid" style="max-height: 200px; object-fit: contain;" />
             }
             else
             {
@@ -24,7 +24,7 @@
             <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
         </svg>
 }
-<div class="card-body">
+<div class="card-body mt-auto">
     <a href="#" class="card-link">Details</a>
     <a class="addtocart card-link btn btn-outline-info" data-productId="@p.Id" asp-action="AddToCart" asp-controller="Cart"
        asp-route-productId="@p.Id"> Add to cart </a>
