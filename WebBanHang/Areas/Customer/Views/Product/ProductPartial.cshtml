@@ -7,7 +7,7 @@
 @foreach (var p in Model)
     {
     <div class="card mb-3 col-md-4">
-        <h3 class="card-header">e</h3>
+        <h3 class="card-header">@p.Name</h3>
         <div class="card-body">
             <h5 class="card-title">Price: @string.Format("{0:#,#,#00} USD", p.Price)</h5>
 
